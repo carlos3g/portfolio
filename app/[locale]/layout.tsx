@@ -62,6 +62,11 @@ export async function generateMetadata({
       type: "website",
       locale: safeLocale === "pt" ? "pt_BR" : "en_US",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+    },
   };
 }
 
