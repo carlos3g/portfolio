@@ -1,0 +1,107 @@
+{
+  "metadata": {
+    "title": "Carlos Mesquita — Desenvolvedor Fullstack",
+    "description": "Portfolio de Carlos Mesquita. Desenvolvedor Fullstack focado em sistemas escaláveis em TypeScript, Node.js, React e AWS.",
+    "ogTitle": "Carlos Mesquita — Desenvolvedor Fullstack",
+    "ogDescription": "Sistemas escaláveis em TypeScript, Node.js, React e AWS."
+  },
+  "nav": {
+    "links": {
+      "about": "Sobre",
+      "experience": "Experiência",
+      "projects": "Projetos",
+      "skills": "Skills",
+      "education": "Formação",
+      "contact": "Contato"
+    },
+    "cta": "Contato"
+  },
+  "themeToggle": {
+    "switchToLight": "Ativar tema claro",
+    "switchToDark": "Ativar tema escuro",
+    "light": "Claro",
+    "dark": "Escuro"
+  },
+  "localeToggle": {
+    "label": "Mudar idioma",
+    "pt": "PT",
+    "en": "EN"
+  },
+  "hero": {
+    "ctaProjects": "Ver projetos",
+    "ctaCv": "Baixar CV",
+    "metrics": {
+      "yearsCoding": "Anos programando",
+      "companies": "Empresas em produção",
+      "stacks": "Stacks principais",
+      "cloud": "Cloud"
+    },
+    "continue": "continuar"
+  },
+  "about": {
+    "eyebrow": "01 · Sobre",
+    "headingLine1": "Engenharia de software",
+    "headingLine2": "com foco em escala.",
+    "facts": {
+      "current": "Atualmente",
+      "currentValue": "Beehive News · Pleno",
+      "based": "Baseado em",
+      "basedValue": "Pedro II — PI, Brasil",
+      "modality": "Modalidade",
+      "modalityValue": "Remoto",
+      "available": "Disponível para",
+      "availableValue": "Oportunidades selecionadas"
+    }
+  },
+  "experience": {
+    "eyebrow": "02 · Experiência",
+    "headingLine1": "Trajetória profissional",
+    "headingLine2": "do código à produção.",
+    "positionsLabel": "{count} posições · profissionais",
+    "volunteerLabel": "— voluntariado —",
+    "deliveriesLabel": "— entregas —",
+    "stackLabel": "— stack —"
+  },
+  "projects": {
+    "eyebrow": "03 · Projetos",
+    "headingLine1": "Projetos pessoais.",
+    "headingLine2": "Curiosidade aplicada.",
+    "countLabel": "{count, plural, =1 {# projeto} other {# projetos}} · em destaque",
+    "highlightsLabel": "— destaques —",
+    "stackLabel": "— stack —"
+  },
+  "skills": {
+    "eyebrow": "04 · Skills",
+    "headingLine1": "Ferramentas afiadas.",
+    "headingLine2": "Escolhidas com critério.",
+    "subtitle": "Stack que uso em produção. Sem buzzwords — só o que entrega.",
+    "itemsLabel": "{count} itens"
+  },
+  "education": {
+    "eyebrow": "05 · Formação",
+    "headingLine1": "Formação acadêmica.",
+    "headingLine2": "Base e continuidade."
+  },
+  "contact": {
+    "eyebrow": "06 · Contato",
+    "headingLine1": "Vamos conversar?",
+    "headingLine2": "Tô aberto a propostas.",
+    "subtitle": "Procurando alguém pra construir do zero, escalar uma plataforma ou consertar uma dor recorrente em produção? Manda mensagem.",
+    "ctaEmail": "Enviar e-mail",
+    "ctaCv": "Ver currículo",
+    "channels": {
+      "email": "E-mail",
+      "github": "GitHub",
+      "linkedin": "LinkedIn",
+      "whatsapp": "WhatsApp"
+    }
+  },
+  "footer": {
+    "github": "github",
+    "linkedin": "linkedin",
+    "toTop": "ao topo ↑"
+  },
+  "dialog": {
+    "close": "Fechar"
+  }
+}
