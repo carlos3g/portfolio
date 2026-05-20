@@ -5,8 +5,11 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { ThemeBoot } from "@/components/theme-boot";
 import { THEME_STORAGE_KEY } from "@/lib/theme-storage";
+import { SITE_URL } from "@/lib/site";
+import { getStructuredData } from "@/lib/structured-data";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
@@ -45,22 +48,42 @@ export async function generateMetadata({
     : routing.defaultLocale;
   const t = await getTranslations({ locale: safeLocale, namespace: "metadata" });
 
+  const canonicalPath =
+    safeLocale === routing.defaultLocale ? "/" : `/${safeLocale}`;
+
   return {
     title: t("title"),
     description: t("description"),
-    metadataBase: new URL("https://carlos3g.dev"),
+    metadataBase: new URL(SITE_URL),
+    authors: [{ name: "Carlos Mesquita", url: SITE_URL }],
+    creator: "Carlos Mesquita",
     alternates: {
-      canonical: safeLocale === routing.defaultLocale ? "/" : `/${safeLocale}`,
+      canonical: canonicalPath,
       languages: {
         pt: "/",
         en: "/en",
+        "x-default": "/",
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
       },
     },
     openGraph: {
       title: t("ogTitle"),
       description: t("ogDescription"),
       type: "website",
+      url: canonicalPath,
+      siteName: "Carlos Mesquita",
       locale: safeLocale === "pt" ? "pt_BR" : "en_US",
+      alternateLocale: safeLocale === "pt" ? "en_US" : "pt_BR",
     },
     twitter: {
       card: "summary_large_image",
@@ -89,6 +112,12 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(getStructuredData(locale)),
+          }}
+        />
       </head>
       <body
         className={`${sans.variable} ${serif.variable} ${mono.variable} noise-overlay`}
@@ -100,6 +129,7 @@ export default async function LocaleLayout({
         <Analytics />
         <SpeedInsights />
       </body>
+      <GoogleAnalytics gaId="G-MVVG4R41HS" />
     </html>
   );
 }
