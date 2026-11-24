@@ -1,9 +1,8 @@
+import { ChevronDown } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import {
-  getExperience,
-  getVolunteer,
-  type Highlight,
-} from "@/lib/portfolio-data";
+import { SectionHeading } from "@/components/section-heading";
+import { getExperience, type Highlight } from "@/lib/portfolio-data";
+import { cn } from "@/lib/utils";
 import type { Locale } from "@/i18n/routing";
 
 const VISIBLE_HIGHLIGHTS = 3;
@@ -11,64 +10,95 @@ const VISIBLE_HIGHLIGHTS = 3;
 export async function Experience() {
   const locale = (await getLocale()) as Locale;
   const experience = getExperience(locale);
-  const volunteer = getVolunteer(locale);
   const t = await getTranslations("experience");
 
   return (
     <section id="experience" className="section">
-      <div className="wrap split">
-        <div className="self-start min-[1081px]:sticky min-[1081px]:top-28">
-          <h2 className="section-title">{t("heading")}</h2>
-          <p className="mt-4 max-w-[30ch] text-muted">{t("subtitle")}</p>
-        </div>
-        <div className="grid min-w-0 gap-[72px]">
+      <div className="wrap grid gap-14 min-[1081px]:grid-cols-[minmax(0,4.4fr)_minmax(0,7fr)] min-[1081px]:gap-16">
+        <SectionHeading
+          eyebrow={t("eyebrow")}
+          title={t("heading")}
+          subtitle={t("subtitle")}
+          className="self-start min-[1081px]:sticky min-[1081px]:top-32"
+        />
+        <ol className="rail relative grid min-w-0 gap-16">
+          <li
+            aria-hidden="true"
+            role="presentation"
+            className="absolute bottom-0 left-[23px] top-3 w-0.5 bg-line max-[560px]:hidden"
+          >
+            <span className="rail-fill block h-full w-full bg-accent" />
+          </li>
           {experience.map((e) => {
             const rest = e.highlights.slice(VISIBLE_HIGHLIGHTS);
             return (
-              <article key={e.id} id={`exp-${e.id}`}>
-                <h3 className="text-2xl font-bold leading-tight tracking-[-0.02em] min-[561px]:text-[28px]">
-                  {e.company}
-                </h3>
-                <p className="mt-1 text-lg text-muted">{e.role}</p>
-                <p className="mt-0.5 text-[15px] text-muted">
-                  {e.location}, {e.period}
-                </p>
-                <Deliveries
-                  items={e.highlights.slice(0, VISIBLE_HIGHLIGHTS)}
-                  className="mt-[22px]"
-                />
-                {rest.length > 0 && (
-                  <details className="group">
-                    <summary className="mt-4 inline-block cursor-pointer list-none rounded font-semibold text-accent">
-                      <span className="group-open:hidden">
-                        {t("showMore", { count: rest.length })}
+              <li
+                key={e.id}
+                id={`exp-${e.id}`}
+                className="relative min-[561px]:pl-[76px]"
+              >
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "mb-4 grid h-12 w-12 place-items-center rounded-2xl text-lg font-extrabold ring-8 ring-bg min-[561px]:absolute min-[561px]:left-0 min-[561px]:top-0",
+                    e.current
+                      ? "bg-accent text-on-accent shadow-button"
+                      : "border border-line-strong bg-surface text-accent"
+                  )}
+                >
+                  {e.company.replace("Grupo ", "").charAt(0)}
+                </span>
+                <div className="reveal">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="text-[1.75rem] font-bold leading-tight tracking-[-0.03em]">
+                      {e.company}
+                    </h3>
+                    {e.current && (
+                      <span className="rounded-full bg-soft px-3 py-0.5 text-sm font-semibold text-accent">
+                        {t("current")}
                       </span>
-                      <span className="hidden group-open:inline">
-                        {t("showLess")}
-                      </span>
-                    </summary>
-                    <Deliveries items={rest} className="mt-3.5" />
-                  </details>
-                )}
-                <p className="mt-[22px] max-w-[66ch] text-[15px] text-muted">
-                  <span className="sr-only">{t("stack")}: </span>
-                  {e.stack.join(", ")}
-                </p>
-              </article>
+                    )}
+                  </div>
+                  <p className="mt-1 text-lg">{e.role}</p>
+                  <p className="text-[15px] text-muted">
+                    {e.location}, {e.period}
+                  </p>
+                  <Deliveries
+                    items={e.highlights.slice(0, VISIBLE_HIGHLIGHTS)}
+                    className="mt-6"
+                  />
+                  {rest.length > 0 && (
+                    <details className="group">
+                      <summary className="mt-4 inline-flex cursor-pointer list-none items-center gap-1.5 rounded-full font-semibold text-accent">
+                        <span className="group-open:hidden">
+                          {t("showMore", { count: rest.length })}
+                        </span>
+                        <span className="hidden group-open:inline">
+                          {t("showLess")}
+                        </span>
+                        <ChevronDown
+                          className="h-4 w-4 transition-transform duration-300 group-open:rotate-180"
+                          aria-hidden="true"
+                        />
+                      </summary>
+                      <Deliveries items={rest} className="mt-4" />
+                    </details>
+                  )}
+                  <ul
+                    aria-label={t("stack")}
+                    className="mt-6 flex flex-wrap gap-2"
+                  >
+                    {e.stack.map((s) => (
+                      <li key={s} className="chip">
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
             );
           })}
-          {volunteer.map((v) => (
-            <article key={v.id} className="border-t pt-10">
-              <h3 className="text-[22px] font-bold leading-tight tracking-[-0.02em]">
-                {v.company}
-              </h3>
-              <p className="mt-1 text-lg text-muted">
-                {v.role}, {t("volunteer")}
-              </p>
-              <Deliveries items={v.highlights} className="mt-4" />
-            </article>
-          ))}
-        </div>
+        </ol>
       </div>
     </section>
   );
@@ -82,9 +112,15 @@ function Deliveries({
   className: string;
 }) {
   return (
-    <ul className={`delivery-list ${className}`}>
+    <ul className={cn("grid max-w-[64ch] gap-3 text-muted", className)}>
       {items.map((h) => (
-        <li key={h.id}>{h.text}</li>
+        <li key={h.id} className="relative pl-6">
+          <span
+            aria-hidden="true"
+            className="absolute left-0 top-[0.62em] h-2 w-2 rounded-full bg-accent ring-4 ring-soft"
+          />
+          {h.text}
+        </li>
       ))}
     </ul>
   );

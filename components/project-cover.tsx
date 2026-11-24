@@ -1,62 +1,102 @@
 import Image from "next/image";
-import shortcutfy from "@/public/projects/shortcutfy.webp";
+import { cn } from "@/lib/utils";
 import type { ProjectItem } from "@/lib/portfolio-data";
 
-const frame =
-  "flex aspect-[5/2] w-full items-center overflow-hidden bg-panel text-panel-ink";
-
-/** Drawn from each project's own material: its terminal, art or command. */
+/** Built from each project's own material: its screen, icon or command. */
 export function ProjectCover({
   project,
-  imageAlt,
+  dashboardAlt,
+  className,
 }: {
   project: ProjectItem;
-  imageAlt: string;
+  dashboardAlt: string;
+  className?: string;
 }) {
+  const frame = cn("relative overflow-hidden", className);
+
   switch (project.cover) {
-    case "terminal":
+    case "dashboard":
       return (
-        <div aria-hidden="true" className={frame}>
-          <div className="grid w-full gap-1.5 px-6 font-mono text-[13px] leading-snug min-[561px]:px-8">
-            <p className="truncate text-panel-muted">
-              webhook-it <span className="text-panel-accent">running</span>
-            </p>
-            <p className="truncate">14:02:51 POST stripe-dev 200</p>
-            <p className="truncate">14:02:31 POST /refunds 200</p>
-            <p className="truncate text-panel-muted">
-              n new - r replay - q quit
+        <div
+          className={frame}
+          style={{
+            background:
+              "radial-gradient(90% 120% at 12% 0%, #9cc6ff, transparent 60%), radial-gradient(80% 100% at 100% 100%, #0b4fb0, transparent 70%), #3b8bff",
+          }}
+        >
+          <Image
+            src="/projects/webhook-it-dashboard.svg"
+            alt={dashboardAlt}
+            width={1191}
+            height={737}
+            unoptimized
+            className="cover-art absolute left-[5%] top-[9%] w-[118%] max-w-none origin-top-left"
+          />
+        </div>
+      );
+    case "icon":
+      return (
+        <div
+          className={cn(frame, "grid place-items-center")}
+          style={{
+            background:
+              "radial-gradient(70% 90% at 50% 40%, #e2ddff, transparent 75%), #b9b2fb",
+          }}
+        >
+          <Image
+            src="/projects/shortcutfy.svg"
+            alt=""
+            width={112}
+            height={112}
+            unoptimized
+            className="cover-art h-28 w-28 rounded-[19px] shadow-[0_24px_44px_-14px_rgb(60_40_160_/_0.65)]"
+          />
+        </div>
+      );
+    case "code":
+      return (
+        <div
+          aria-hidden="true"
+          className={cn(frame, "grid place-items-center px-5")}
+          style={{
+            background:
+              "radial-gradient(70% 90% at 30% 20%, #ffe7b8, transparent 70%), #f3b562",
+          }}
+        >
+          <div className="cover-art w-full max-w-[19rem] overflow-hidden rounded-2xl bg-[#1d1a16] shadow-[0_24px_44px_-14px_rgb(110_60_0_/_0.6)]">
+            <div className="flex gap-1.5 px-4 pt-3.5">
+              <i className="h-2.5 w-2.5 rounded-full bg-[#ff5f56]" />
+              <i className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+              <i className="h-2.5 w-2.5 rounded-full bg-[#27c93f]" />
+            </div>
+            <p className="truncate px-4 pb-5 pt-3.5 font-mono text-[13px] text-[#f6eee2]">
+              <span className="text-[#f3b562]">$ </span>npm create
+              @carlos3g/config
             </p>
           </div>
         </div>
       );
-    case "image":
-      return (
-        <Image
-          src={shortcutfy}
-          alt={imageAlt}
-          unoptimized
-          className="aspect-[5/2] w-full object-cover"
-        />
-      );
-    case "code":
-      return (
-        <div aria-hidden="true" className={frame}>
-          <p className="w-full truncate px-6 font-mono text-[clamp(0.8125rem,1.5vw,1.0625rem)] min-[561px]:px-8">
-            <span className="text-panel-accent">$ </span>npm create
-            @carlos3g/config
-          </p>
-        </div>
-      );
-    case "type":
+    case "motion":
       return (
         <div
           aria-hidden="true"
-          className="flex aspect-[5/2] w-full items-end overflow-hidden bg-accent px-6 pb-5 text-on-accent min-[561px]:px-8"
+          className={cn(frame, "grid place-items-center")}
+          style={{
+            background:
+              "radial-gradient(70% 90% at 70% 20%, #bff5de, transparent 70%), #56cfa6",
+          }}
         >
-          <p className="text-[clamp(1.5rem,3.2vw,2.25rem)] font-extrabold leading-none tracking-[-0.035em]">
-            Reanimated
-            <br />+ Skia
-          </p>
+          <div className="cover-art flex items-end gap-3">
+            {["#0a5f47", "#ffffff", "#0f7b5c", "#e9ff9c"].map((color, i) => (
+              <i
+                key={color}
+                className="bob h-12 w-12 rounded-full shadow-[0_18px_30px_-10px_rgb(4_70_50_/_0.55)]"
+                style={
+                  { background: color, "--i": i } as React.CSSProperties
+                }
+              />
+            ))}
+          </div>
         </div>
       );
     default:

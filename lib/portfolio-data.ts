@@ -21,11 +21,13 @@ export interface ExperienceItem {
   company: string;
   location: string;
   period: string;
+  /** Ongoing position. */
+  current: boolean;
   highlights: Highlight[];
   stack: string[];
 }
 
-export type ProjectCover = "terminal" | "image" | "code" | "type";
+export type ProjectCover = "dashboard" | "icon" | "code" | "motion";
 
 export interface ProjectLink {
   href: string;
@@ -368,7 +370,7 @@ const projectsSource: ProjectSource[] = [
       },
       { href: "https://github.com/carlos3g/webhook-it", label: repoLabel },
     ],
-    cover: "terminal",
+    cover: "dashboard",
   },
   {
     id: "shortcutfy",
@@ -385,7 +387,7 @@ const projectsSource: ProjectSource[] = [
       },
       { href: "https://github.com/carlos3g/shortcutfy", label: repoLabel },
     ],
-    cover: "image",
+    cover: "icon",
   },
   {
     id: "code-style",
@@ -418,7 +420,7 @@ const projectsSource: ProjectSource[] = [
         label: repoLabel,
       },
     ],
-    cover: "type",
+    cover: "motion",
   },
   {
     id: "echoes",
@@ -543,6 +545,7 @@ function localizeExperience(
     company: src.company,
     location: L(src.location, locale),
     period: formatYears(src.years, locale),
+    current: src.years.end === null,
     highlights: src.highlights.map((h) => ({
       id: h.id,
       text: L(h.text, locale),

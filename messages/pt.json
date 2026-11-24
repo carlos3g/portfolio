@@ -19,53 +19,85 @@
       "contact": "Contato"
     }
   },
-  "themeToggle": { "label": "Alternar tema claro e escuro" },
-  "localeToggle": { "label": "EN: switch to English", "short": "EN" },
-  "hero": { "ctaCv": "Baixar CV", "ctaContact": "Entrar em contato" },
+  "themeToggle": {
+    "label": "Alternar tema claro e escuro"
+  },
+  "localeToggle": {
+    "label": "EN: switch to English",
+    "short": "EN"
+  },
+  "hero": {
+    "ctaCv": "Baixar CV",
+    "ctaContact": "Entrar em contato",
+    "status": "Aberto a propostas",
+    "based": "São Paulo, SP",
+    "modality": "Remoto",
+    "email": "E-mail"
+  },
   "map": {
     "title": "Sistemas que eu já construí",
-    "subtitle": "Partes de projetos diferentes em um só mapa. Escolha uma para ver o que eu fiz.",
+    "subtitle": "Partes de projetos diferentes. Escolha uma para ver o que eu fiz.",
     "label": "Mapa de sistemas"
   },
   "about": {
-    "heading": "Sobre mim",
-    "facts": {
-      "based": "Onde estou",
-      "basedValue": "São Paulo, SP",
-      "modality": "Modalidade",
-      "modalityValue": "Remoto",
-      "available": "Disponibilidade",
-      "availableValue": "Aberto a propostas"
+    "eyebrow": "Sobre",
+    "heading": "Do desenho à produção, sem largar no meio.",
+    "cards": {
+      "endToEnd": {
+        "title": "Ponta a ponta",
+        "text": "Do design de arquitetura à operação em produção, no web, no app e no backend."
+      },
+      "payments": {
+        "title": "Pagamentos",
+        "text": "Gateways, assinaturas, contratos com assinatura eletrônica e webhooks."
+      },
+      "reliability": {
+        "title": "Operação na AWS",
+        "text": "Alta disponibilidade, filas, observabilidade, CI/CD e testes automatizados."
+      }
     }
   },
   "experience": {
-    "heading": "Onde eu já coloquei código em produção",
+    "heading": "Onde eu já coloquei código em produção.",
     "subtitle": "As principais entregas de cada empresa.",
     "showMore": "Ver mais {count}",
     "showLess": "Ver menos",
     "stack": "Stack",
-    "volunteer": "voluntariado"
+    "eyebrow": "Experiência",
+    "current": "Atual"
   },
   "projects": {
-    "heading": "Projetos que eu mantenho",
+    "heading": "Projetos que eu mantenho.",
     "subtitle": "Ferramentas e experimentos meus, do terminal ao celular.",
     "also": "Também trabalhando em",
     "stack": "Stack",
-    "shortcutfyAlt": "Arte de divulgação do Shortcutfy"
+    "eyebrow": "Projetos",
+    "dashboardAlt": "Painel do webhook-it no terminal, com endpoints à esquerda e eventos recebidos à direita",
+    "featured": "Destaque"
   },
   "skills": {
-    "heading": "Com o que eu trabalho"
+    "heading": "Com o que eu trabalho.",
+    "eyebrow": "Skills"
   },
-  "education": { "heading": "Formação" },
+  "education": {
+    "eyebrow": "Formação",
+    "heading": "Estudo e comunidade.",
+    "volunteer": "Voluntariado"
+  },
   "contact": {
-    "heading": "Vamos conversar",
+    "heading": "Vamos conversar?",
     "subtitle": "Para construir do zero, escalar uma plataforma ou resolver um problema recorrente em produção.",
     "copy": "Copiar e-mail",
     "copied": "E-mail copiado",
     "selected": "Não consegui copiar. O e-mail está selecionado",
-    "cv": "Baixar CV"
+    "cv": "Baixar CV",
+    "eyebrow": "Contato"
   },
-  "footer": { "toTop": "Voltar ao topo" },
+  "footer": {
+    "toTop": "Voltar ao topo",
+    "navigate": "Navegar",
+    "connect": "Conectar"
+  },
   "notFound": {
     "title": "Página não encontrada",
     "text": "Esse endereço não existe ou mudou de lugar.",

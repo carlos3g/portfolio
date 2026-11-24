@@ -103,7 +103,7 @@ const baseSource: NodeSource[] = [
   {
     id: "quality",
     label: { pt: "Testes e CI/CD", en: "Tests and CI/CD" },
-    tech: "GitHub Actions, Jest",
+    tech: "Jest, Actions",
     highlights: ["beehive-cicd", "beehive-tests"],
   },
 ];

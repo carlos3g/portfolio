@@ -11,16 +11,11 @@ const config: Config = {
       colors: {
         bg: "var(--bg)",
         surface: "var(--surface)",
+        raised: "var(--raised)",
         ink: "var(--ink)",
-        line: "var(--line)",
+        line: { DEFAULT: "var(--line)", strong: "var(--line-strong)" },
         soft: "var(--soft)",
         "on-accent": "var(--on-accent)",
-        panel: {
-          DEFAULT: "var(--panel)",
-          ink: "var(--panel-ink)",
-          muted: "var(--panel-muted)",
-          accent: "var(--panel-accent)",
-        },
 
         // shadcn names, aliased to the same tokens so generated primitives fit.
         background: "var(--bg)",
@@ -38,6 +33,11 @@ const config: Config = {
           hover: "var(--accent-hover)",
           foreground: "var(--on-accent)",
         },
+      },
+      boxShadow: {
+        card: "var(--shadow-card)",
+        lift: "var(--shadow-lift)",
+        button: "var(--shadow-button)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],

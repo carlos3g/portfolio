@@ -1,5 +1,6 @@
 "use client";
 
+import { Globe } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -18,8 +19,9 @@ export function LocaleToggle() {
       lang={next}
       aria-label={t("label")}
       title={t("label")}
-      className="grid h-10 min-w-10 place-items-center rounded-md text-sm font-semibold text-muted transition-colors hover:bg-soft hover:text-ink"
+      className="icon-button !h-10 !w-auto !grid-flow-col gap-1.5 px-2.5 text-sm font-semibold"
     >
+      <Globe className="hidden h-[17px] w-[17px] min-[561px]:block" aria-hidden="true" />
       {t("short")}
     </Link>
   );
