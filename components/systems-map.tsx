@@ -152,7 +152,7 @@ export function SystemsMap({ data, title, subtitle, label }: Props) {
             <li key={h.text} className="flex gap-3">
               <span
                 aria-hidden="true"
-                className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                className="mt-[0.5em] h-1.5 w-1.5 shrink-0 rounded-full bg-fill"
               />
               <span>
                 {h.text}{" "}

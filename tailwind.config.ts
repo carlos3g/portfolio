@@ -15,7 +15,8 @@ const config: Config = {
         ink: "var(--ink)",
         line: { DEFAULT: "var(--line)", strong: "var(--line-strong)" },
         soft: "var(--soft)",
-        "on-accent": "var(--on-accent)",
+        fill: { DEFAULT: "var(--fill)", hover: "var(--fill-hover)" },
+        "on-fill": "var(--on-fill)",
 
         // shadcn names, aliased to the same tokens so generated primitives fit.
         background: "var(--bg)",
@@ -25,14 +26,10 @@ const config: Config = {
         ring: "var(--accent)",
         card: { DEFAULT: "var(--surface)", foreground: "var(--ink)" },
         popover: { DEFAULT: "var(--surface)", foreground: "var(--ink)" },
-        primary: { DEFAULT: "var(--accent)", foreground: "var(--on-accent)" },
+        primary: { DEFAULT: "var(--fill)", foreground: "var(--on-fill)" },
         secondary: { DEFAULT: "var(--soft)", foreground: "var(--ink)" },
         muted: { DEFAULT: "var(--muted)", foreground: "var(--muted)" },
-        accent: {
-          DEFAULT: "var(--accent)",
-          hover: "var(--accent-hover)",
-          foreground: "var(--on-accent)",
-        },
+        accent: { DEFAULT: "var(--accent)", foreground: "var(--on-fill)" },
       },
       boxShadow: {
         card: "var(--shadow-card)",

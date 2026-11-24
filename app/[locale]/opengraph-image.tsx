@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { loadGoogleFont } from "@/lib/google-font";
 import { getProfile } from "@/lib/portfolio-data";
 
 export const size = { width: 1200, height: 630 };
@@ -12,23 +13,6 @@ export const dynamic = "force-static";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
-}
-
-async function loadGoogleFont(
-  family: string,
-  weight: number
-): Promise<ArrayBuffer> {
-  const url = `https://fonts.googleapis.com/css2?family=${family.replace(
-    / /g,
-    "+"
-  )}:wght@${weight}&display=swap`;
-  const css = await (await fetch(url)).text();
-  const match = css.match(/src:\s*url\((.+?)\)\s*format/);
-  if (!match) throw new Error(`Could not resolve font ${family}@${weight}`);
-  const fontUrl = match[1].replace(/['"]/g, "");
-  const response = await fetch(fontUrl);
-  if (!response.ok) throw new Error(`Failed to load font ${family}@${weight}`);
-  return await response.arrayBuffer();
 }
 
 export default async function OpengraphImage({
@@ -59,17 +43,19 @@ export default async function OpengraphImage({
         style={{
           width: "100%",
           height: "100%",
-          background: "#F5F8F6",
+          background: "#FEFDFC",
+          backgroundImage:
+            "linear-gradient(115deg, rgba(254,253,252,1) 48%, rgba(255,226,196,1) 76%, rgba(246,130,31,1) 118%)",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 80,
           fontFamily: "Schibsted Grotesk",
           fontWeight: 500,
-          color: "#14201B",
+          color: "#1D1713",
         }}
       >
-        <div style={{ display: "flex", fontSize: 28, color: "#56635D" }}>
+        <div style={{ display: "flex", fontSize: 28, color: "#635A53" }}>
           carlos3g.dev
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -92,7 +78,7 @@ export default async function OpengraphImage({
               marginTop: 32,
               fontSize: 36,
               fontWeight: 800,
-              color: "#0F7B5C",
+              color: "#AD4A00",
             }}
           >
             {profile.title}
@@ -102,7 +88,7 @@ export default async function OpengraphImage({
               display: "flex",
               marginTop: 10,
               fontSize: 30,
-              color: "#56635D",
+              color: "#635A53",
             }}
           >
             {t("ogDescription")}

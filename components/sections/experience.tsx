@@ -27,7 +27,7 @@ export async function Experience() {
             role="presentation"
             className="absolute bottom-0 left-[23px] top-3 w-0.5 bg-line max-[560px]:hidden"
           >
-            <span className="rail-fill block h-full w-full bg-accent" />
+            <span className="rail-fill block h-full w-full bg-fill" />
           </li>
           {experience.map((e) => {
             const rest = e.highlights.slice(VISIBLE_HIGHLIGHTS);
@@ -42,7 +42,7 @@ export async function Experience() {
                   className={cn(
                     "mb-4 grid h-12 w-12 place-items-center rounded-2xl text-lg font-extrabold ring-8 ring-bg min-[561px]:absolute min-[561px]:left-0 min-[561px]:top-0",
                     e.current
-                      ? "bg-accent text-on-accent shadow-button"
+                      ? "bg-fill text-on-fill shadow-button"
                       : "border border-line-strong bg-surface text-accent"
                   )}
                 >
@@ -117,7 +117,7 @@ function Deliveries({
         <li key={h.id} className="relative pl-6">
           <span
             aria-hidden="true"
-            className="absolute left-0 top-[0.62em] h-2 w-2 rounded-full bg-accent ring-4 ring-soft"
+            className="absolute left-0 top-[0.62em] h-2 w-2 rounded-full bg-fill ring-4 ring-soft"
           />
           {h.text}
         </li>

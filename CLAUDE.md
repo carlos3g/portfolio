@@ -64,7 +64,7 @@ The store does **not** hold the locale — that comes from `next-intl` (URL is t
 
 ### Theming — class-based with FOUC-prevention boot script
 
-Tailwind is configured with `darkMode: "class"`. There is a single token set in `app/globals.css` (`:root` for light, `html.dark` for dark): `--bg`, `--surface`, `--ink`, `--muted`, `--line`, `--accent`, `--on-accent`, `--soft`, `--raised`, `--line-strong`, the `--glow-*` aurora colors and the `--shadow-*` elevations. `tailwind.config.ts` exposes them as colors and also aliases the shadcn names (`background`, `primary`, `border`, ...) to the same tokens.
+Tailwind is configured with `darkMode: "class"`. There is a single token set in `app/globals.css` (`:root` for light, `html.dark` for dark): `--bg`, `--surface`, `--ink`, `--muted`, `--line`, `--accent` (text, links, icons), `--fill` + `--on-fill` (solid orange `#f6821f`, always with dark text), `--soft`, `--raised`, `--line-strong`, the `--glow-*` aurora colors and the `--shadow-*` elevations. `tailwind.config.ts` exposes them as colors and also aliases the shadcn names (`background`, `primary`, `border`, ...) to the same tokens.
 
 Text colors are checked for AA contrast, so don't lighten text with opacity.
 
@@ -72,7 +72,7 @@ Text colors are checked for AA contrast, so don't lighten text with opacity.
 
 The storage key (`THEME_STORAGE_KEY`) lives in `lib/theme-storage.ts` — a non-`"use client"` module — and is imported by the (server) layout, the (client) store, and the (client) theme-boot. It must stay there: importing a plain string constant from a `"use client"` module into a Server Component yields a client-reference proxy, not the literal value, which silently serialized as `undefined` inside the inline boot script and broke hydration. If you rename the key or change theme class names, update `lib/theme-storage.ts`, the layout boot script, and `theme-boot.tsx` together.
 
-Custom classes live in `@layer components` of `globals.css`: `.wrap`, `.section`, `.eyebrow`, `.section-title`, `.card`/`.card-hover`, `.chip`, `.icon-tile`, `.icon-button`, `.text-link`, `.aurora`, `.dots`, `.map-*`, `.rail`, `.on-deep` (re-scopes the tokens for the dark green contact panel). The only font is Schibsted Grotesk (`next/font`).
+Custom classes live in `@layer components` of `globals.css`: `.wrap`, `.section`, `.eyebrow`, `.section-title`, `.card`/`.card-hover`, `.chip`, `.icon-tile`, `.icon-button`, `.text-link`, `.aurora`, `.dots`, `.map-*`, `.rail`, `.on-deep` (re-scopes the tokens for the dark contact panel). The only font is Schibsted Grotesk (`next/font`).
 
 Motion is CSS only: `.enter` runs on load; `.reveal`, `.rail-fill` and the header edge use scroll-driven animations inside `@supports (animation-timeline: view())`, so unsupported browsers just show the content. Everything is off under `prefers-reduced-motion`. Full-page screenshots show sections below the fold as hidden, because `.reveal` depends on scroll: capture by viewport.
 

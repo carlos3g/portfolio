@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-accent text-on-accent shadow-button hover:bg-accent-hover",
+          "border-transparent bg-fill text-on-fill shadow-button hover:bg-fill-hover",
         outline: "border-line-strong bg-surface text-ink hover:border-accent hover:text-accent",
       },
       size: {
