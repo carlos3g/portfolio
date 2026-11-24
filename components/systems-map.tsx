@@ -127,7 +127,7 @@ export function SystemsMap({ data, title, subtitle, label }: Props) {
             renderNode(
               n,
               n.id === "api"
-                ? "map-node-wide col-span-full justify-center"
+                ? "map-node-full col-span-full justify-center"
                 : n.id === "web" || n.id === "notifications"
                   ? "map-node-wide max-[560px]:col-span-full"
                   : undefined

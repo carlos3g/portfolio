@@ -230,9 +230,16 @@
 
   /* Narrow nodes stack so long labels fit under the icon. */
   @media (max-width: 690px) {
-    .map-node:not(.map-node-wide) {
+    .map-node:not(.map-node-full) {
       flex-direction: column;
       align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .map-node.map-node-wide:not(.map-node-full) {
+      flex-direction: row;
+      align-items: center;
     }
   }
 
