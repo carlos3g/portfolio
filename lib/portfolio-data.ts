@@ -4,30 +4,46 @@ type Localized<T> = { pt: T; en: T };
 
 const L = <T>(value: Localized<T>, locale: Locale): T => value[locale];
 
+interface Years {
+  start: string;
+  /** `null` means ongoing. */
+  end: string | null;
+}
+
+export interface Highlight {
+  id: string;
+  text: string;
+}
+
 export interface ExperienceItem {
   id: string;
   role: string;
   company: string;
   location: string;
   period: string;
-  summary: string;
-  highlights: string[];
+  highlights: Highlight[];
   stack: string[];
+}
+
+export type ProjectCover = "terminal" | "image" | "code" | "type";
+
+export interface ProjectLink {
+  href: string;
+  label: string;
 }
 
 export interface ProjectItem {
   id: string;
   title: string;
-  role: string;
-  period: string;
   summary: string;
-  narrative: string;
   stack: string[];
-  highlights: string[];
-  link?: { href: string; label: string };
+  links: ProjectLink[];
+  /** `null` renders the project as a plain row, without a card cover. */
+  cover: ProjectCover | null;
 }
 
 export interface EducationItem {
+  id: string;
   institution: string;
   course: string;
   location: string;
@@ -35,6 +51,7 @@ export interface EducationItem {
 }
 
 export interface SkillGroup {
+  id: string;
   label: string;
   items: string[];
 }
@@ -45,13 +62,17 @@ export interface Profile {
   title: string;
   tagline: string;
   summary: string;
-  focus: string;
   email: string;
   phone: string;
   whatsapp: string;
   github: string;
   linkedin: string;
   cvUrl: string;
+}
+
+interface HighlightSource {
+  id: string;
+  text: Localized<string>;
 }
 
 interface ExperienceSource {
@@ -59,49 +80,40 @@ interface ExperienceSource {
   role: Localized<string>;
   company: string;
   location: Localized<string>;
-  period: Localized<string>;
-  summary: Localized<string>;
-  highlights: Localized<string[]>;
+  years: Years;
+  /** Display order. The first three are visible before "show more". */
+  highlights: HighlightSource[];
   stack: string[];
 }
 
 interface ProjectSource {
   id: string;
   title: string;
-  role: Localized<string>;
-  period: Localized<string>;
   summary: Localized<string>;
-  narrative: Localized<string>;
   stack: string[];
-  highlights: Localized<string[]>;
-  link?: { href: string; label: string };
+  links: { href: string; label: Localized<string> }[];
+  cover: ProjectCover | null;
 }
 
 interface EducationSource {
+  id: string;
   institution: string;
   course: Localized<string>;
   location: string;
-  period: Localized<string>;
+  years: Years;
 }
 
 interface SkillGroupSource {
+  id: string;
   label: Localized<string>;
   items: string[];
 }
 
-interface ProfileSource {
-  name: string;
-  handle: string;
+interface ProfileSource
+  extends Omit<Profile, "title" | "tagline" | "summary"> {
   title: Localized<string>;
   tagline: Localized<string>;
   summary: Localized<string>;
-  focus: Localized<string>;
-  email: string;
-  phone: string;
-  whatsapp: string;
-  github: string;
-  linkedin: string;
-  cvUrl: string;
 }
 
 const profileSource: ProfileSource = {
@@ -112,16 +124,12 @@ const profileSource: ProfileSource = {
     en: "Fullstack Developer",
   },
   tagline: {
-    pt: "Construo sistemas escaláveis em TypeScript, Node.js, React e AWS — do design de arquitetura à operação em produção.",
-    en: "I build scalable systems in TypeScript, Node.js, React and AWS — from architecture design to production operation.",
+    pt: "Levo sistemas de pagamento, APIs e apps do desenho da arquitetura até a operação na AWS.",
+    en: "I take payment systems, APIs and apps from architecture design to running on AWS.",
   },
   summary: {
-    pt: "Desenvolvedor Fullstack com mais de 4 anos de experiência construindo aplicações escaláveis em TypeScript, Node.js, React, React Native, PHP e Laravel. Atuação de ponta a ponta, do design de arquitetura à operação em produção, com forte domínio de infraestrutura AWS (EC2, SQS, S3, Lambda, Auto Scaling Groups) e práticas de observabilidade, CI/CD e testes automatizados.",
-    en: "Fullstack Developer with 4+ years of experience building scalable applications in TypeScript, Node.js, React, React Native, PHP and Laravel. End-to-end ownership, from architecture design to production operation, with strong command of AWS infrastructure (EC2, SQS, S3, Lambda, Auto Scaling Groups) and observability, CI/CD and automated testing practices.",
-  },
-  focus: {
-    pt: "Experiência comprovada em sistemas de pagamentos, integrações com gateways financeiros e plataformas de alta disponibilidade. Foco em entregar software estável, performático e bem testado.",
-    en: "Proven experience in payment systems, financial gateway integrations and high-availability platforms. Focused on delivering stable, performant and well-tested software.",
+    pt: "Construo aplicações escaláveis em TypeScript, Node.js, React, React Native, PHP e Laravel. Atuo de ponta a ponta, do design de arquitetura à operação em produção, com forte domínio de infraestrutura AWS e práticas de observabilidade, CI/CD e testes automatizados. Tenho experiência em sistemas de pagamentos, integrações com gateways financeiros e plataformas de alta disponibilidade.",
+    en: "I build scalable applications in TypeScript, Node.js, React, React Native, PHP and Laravel. I work end to end, from architecture design to production operations, with strong command of AWS infrastructure and practices in observability, CI/CD and automated testing. I have experience with payment systems, financial gateway integrations and high-availability platforms.",
   },
   email: "carlosmesquita156@gmail.com",
   phone: "+55 86 98131-3925",
@@ -132,6 +140,8 @@ const profileSource: ProfileSource = {
     "https://github.com/carlos3g/curriculum-vitae/releases/latest/download/cv.pdf",
 };
 
+const remote: Localized<string> = { pt: "Remoto", en: "Remote" };
+
 const experienceSource: ExperienceSource[] = [
   {
     id: "beehive",
@@ -140,39 +150,71 @@ const experienceSource: ExperienceSource[] = [
       en: "Mid-level Fullstack Developer",
     },
     company: "Beehive News",
-    location: { pt: "Remoto", en: "Remote" },
-    period: { pt: "Nov. 2024 — Presente", en: "Nov 2024 — Present" },
-    summary: {
-      pt: "Atuação full-stack e DevOps, com foco em escalabilidade, estabilidade e qualidade de software.",
-      en: "Full-stack and DevOps work, focused on scalability, stability and software quality.",
-    },
-    highlights: {
-      pt: [
-        "Desenvolvi de ponta a ponta usando ExpressJS, TypeScript, React Native, ReactJS, AWS e Vercel.",
-        "Estruturei e implementei testes automatizados (unitários e E2E) — não havia nenhuma cobertura anteriormente.",
-        "Garanti alta disponibilidade da infra AWS configurando health checks, Auto Scaling Groups e otimização com SQS.",
-        "Implementei observabilidade completa no backend com Jaeger Tracing e Sentry; logging no app com Sentry e GA.",
-        "Desenvolvi a funcionalidade de storyboards, no backend e no app.",
-        "Implementei todo o sistema de notificações com OneSignal, AWS SQS e demais integrações.",
-        "Estruturei e automatizei pipelines de CI/CD com GitHub Actions, AWS CodeDeploy e Fastlane.",
-        "Desenvolvi um backoffice em ReactJS com React Router v7, shadcn e React Query.",
-      ],
-      en: [
-        "Built end-to-end with ExpressJS, TypeScript, React Native, ReactJS, AWS and Vercel.",
-        "Designed and implemented automated tests (unit and E2E) — no coverage existed previously.",
-        "Ensured AWS infrastructure high availability via health checks, Auto Scaling Groups and SQS-based optimization.",
-        "Implemented full backend observability with Jaeger Tracing and Sentry; in-app logging with Sentry and GA.",
-        "Developed the storyboards feature, both on the backend and in the app.",
-        "Built the entire notification system with OneSignal, AWS SQS and surrounding integrations.",
-        "Designed and automated CI/CD pipelines with GitHub Actions, AWS CodeDeploy and Fastlane.",
-        "Built a backoffice in ReactJS with React Router v7, shadcn and React Query.",
-      ],
-    },
+    location: remote,
+    years: { start: "2024", end: null },
+    highlights: [
+      {
+        id: "beehive-availability",
+        text: {
+          pt: "Garanti a estabilidade e alta disponibilidade da infraestrutura AWS, configurando health checks, Auto Scaling Groups e filas (SQS) para distribuir carga.",
+          en: "Ensured stability and high availability of the AWS infrastructure by configuring health checks, Auto Scaling Groups and queues (SQS) to distribute load.",
+        },
+      },
+      {
+        id: "beehive-observability",
+        text: {
+          pt: "Implementei observabilidade completa no backend com Jaeger Tracing e Sentry, além de logging no app com Sentry e Google Analytics.",
+          en: "Implemented full backend observability with Jaeger Tracing and Sentry, plus app logging with Sentry and Google Analytics.",
+        },
+      },
+      {
+        id: "beehive-tests",
+        text: {
+          pt: "Estruturei e implementei testes automatizados (unitários e E2E) onde não havia nenhuma cobertura.",
+          en: "Designed and implemented automated tests (unit and E2E) where no coverage existed.",
+        },
+      },
+      {
+        id: "beehive-notifications",
+        text: {
+          pt: "Implementei todo o sistema de notificações com OneSignal, AWS SQS e outras integrações.",
+          en: "Built the entire notification system with OneSignal, AWS SQS and other integrations.",
+        },
+      },
+      {
+        id: "beehive-cicd",
+        text: {
+          pt: "Estruturei e automatizei pipelines de CI/CD para backend e mobile com GitHub Actions, AWS CodeDeploy e Fastlane.",
+          en: "Designed and automated CI/CD pipelines for backend and mobile with GitHub Actions, AWS CodeDeploy and Fastlane.",
+        },
+      },
+      {
+        id: "beehive-backoffice",
+        text: {
+          pt: "Desenvolvi um backoffice em React com React Router v7, shadcn e React Query.",
+          en: "Built a backoffice in React with React Router v7, shadcn and React Query.",
+        },
+      },
+      {
+        id: "beehive-storyboards",
+        text: {
+          pt: "Desenvolvi a funcionalidade de storyboards, no backend e no app.",
+          en: "Developed the storyboards feature, on both the backend and the app.",
+        },
+      },
+      {
+        id: "beehive-fullstack",
+        text: {
+          pt: "Atuei de ponta a ponta com Express.js, TypeScript, React Native, React, AWS e Vercel.",
+          en: "Worked end to end with Express.js, TypeScript, React Native, React, AWS and Vercel.",
+        },
+      },
+    ],
     stack: [
       "TypeScript",
-      "ExpressJS",
+      "Express.js",
       "React Native",
-      "ReactJS",
+      "React",
       "AWS",
       "Vercel",
       "Sentry",
@@ -181,39 +223,60 @@ const experienceSource: ExperienceSource[] = [
   },
   {
     id: "navan",
-    role: {
-      pt: "Desenvolvedor Fullstack",
-      en: "Fullstack Developer",
-    },
+    role: { pt: "Desenvolvedor Fullstack", en: "Fullstack Developer" },
     company: "Navan",
-    location: { pt: "Remoto", en: "Remote" },
-    period: { pt: "Ago. 2023 — Nov. 2024", en: "Aug 2023 — Nov 2024" },
-    summary: {
-      pt: "Desenvolvimento Fullstack com PHP, Laravel, NestJS, Next.js, ReactJS e React Native.",
-      en: "Fullstack development with PHP, Laravel, NestJS, Next.js, ReactJS and React Native.",
-    },
-    highlights: {
-      pt: [
-        "Configuração e implementação de stack AWS: SQS, S3, SES, EC2, Lambda.",
-        "Planejamento e implementação de pagamentos, assinaturas, fluxos de cadastro e contratos, assinatura eletrônica e webhooks próprios.",
-        "Implementação de gateways de pagamento como Asaas.",
-        "Integração entre sistemas em PHP puro e Laravel.",
-        "Testes com PHP Pest, PHPUnit, Jest e Maestro.",
-      ],
-      en: [
-        "Set up and implemented AWS stack: SQS, S3, SES, EC2, Lambda.",
-        "Designed and shipped payments, subscriptions, signup and contract flows, e-signature and in-house webhooks.",
-        "Integrated payment gateways such as Asaas.",
-        "Integration between vanilla PHP and Laravel systems.",
-        "Testing with PHP Pest, PHPUnit, Jest and Maestro.",
-      ],
-    },
+    location: remote,
+    years: { start: "2023", end: "2024" },
+    highlights: [
+      {
+        id: "navan-payments",
+        text: {
+          pt: "Planejei e implementei pagamentos, assinaturas, fluxos de cadastro e contratos, assinatura eletrônica e webhooks próprios.",
+          en: "Planned and implemented payments, subscriptions, signup and contract flows, electronic signature and custom webhooks.",
+        },
+      },
+      {
+        id: "navan-aws",
+        text: {
+          pt: "Configurei e implementei a stack AWS do produto: SQS, S3, SES, EC2 e Lambda.",
+          en: "Configured and deployed the product's AWS stack: SQS, S3, SES, EC2 and Lambda.",
+        },
+      },
+      {
+        id: "navan-gateways",
+        text: {
+          pt: "Integrei gateways de pagamento, como o Asaas.",
+          en: "Integrated payment gateways such as Asaas.",
+        },
+      },
+      {
+        id: "navan-legacy",
+        text: {
+          pt: "Integrei sistemas legados em PHP puro com aplicações Laravel.",
+          en: "Integrated legacy plain-PHP systems with Laravel applications.",
+        },
+      },
+      {
+        id: "navan-tests",
+        text: {
+          pt: "Implementei testes automatizados com Pest, PHPUnit, Jest e Maestro.",
+          en: "Implemented automated tests with Pest, PHPUnit, Jest and Maestro.",
+        },
+      },
+      {
+        id: "navan-fullstack",
+        text: {
+          pt: "Desenvolvi aplicações full-stack com PHP, Laravel, NestJS, Next.js, React, React Native, Redis e PostgreSQL.",
+          en: "Developed full-stack applications with PHP, Laravel, NestJS, Next.js, React, React Native, Redis and PostgreSQL.",
+        },
+      },
+    ],
     stack: [
       "PHP",
       "Laravel",
       "NestJS",
       "Next.js",
-      "ReactJS",
+      "React",
       "React Native",
       "Redis",
       "PostgreSQL",
@@ -222,34 +285,48 @@ const experienceSource: ExperienceSource[] = [
   },
   {
     id: "smarti",
-    role: {
-      pt: "Desenvolvedor Fullstack",
-      en: "Fullstack Developer",
-    },
+    role: { pt: "Desenvolvedor Fullstack", en: "Fullstack Developer" },
     company: "Grupo Smarti",
-    location: { pt: "Remoto", en: "Remote" },
-    period: { pt: "Fev. 2023 — Nov. 2023", en: "Feb 2023 — Nov 2023" },
-    summary: {
-      pt: "Atuação em hub de pagamentos: gateways, AWS e migração para arquitetura orientada a eventos.",
-      en: "Payments hub work: gateways, AWS and migration to an event-driven architecture.",
-    },
-    highlights: {
-      pt: [
-        "Implementei gateways de pagamento, serviços AWS e atualizei a arquitetura para CQRS orientada a eventos.",
-        "Desenvolvi um backoffice em React.JS.",
-        "Apps em React Native com Google Analytics, OneSignal e APIs de maps, câmera e localização.",
-        "Aprimorei performance de apps existentes, reduzindo tempo de resposta.",
-        "No front-end, implementei novos designs e funcionalidades, atualizei legados em Next.js, React.js e Vue.js.",
-      ],
-      en: [
-        "Implemented payment gateways, AWS services and migrated the architecture to event-driven CQRS.",
-        "Built a backoffice in React.JS.",
-        "React Native apps with Google Analytics, OneSignal and maps, camera and geolocation APIs.",
-        "Improved performance of existing apps, reducing response times.",
-        "On the front-end, shipped new designs and features, modernized legacy code in Next.js, React.js and Vue.js.",
-      ],
-    },
-    stack: ["React.js", "React Native", "Next.js", "Vue.js", "AWS", "CQRS"],
+    location: remote,
+    years: { start: "2023", end: "2023" },
+    highlights: [
+      {
+        id: "smarti-hub",
+        text: {
+          pt: "Atuei em um hub de pagamentos: implementei gateways e serviços AWS e migrei a arquitetura para um modelo orientado a eventos com CQRS.",
+          en: "Worked on a payments hub: implemented gateways and AWS services and migrated the architecture to an event-driven design with CQRS.",
+        },
+      },
+      {
+        id: "smarti-mobile",
+        text: {
+          pt: "Desenvolvi apps com React Native, com Google Analytics, OneSignal e APIs de mapas, câmera e localização.",
+          en: "Built apps with React Native, with Google Analytics, OneSignal and maps, camera and location APIs.",
+        },
+      },
+      {
+        id: "smarti-performance",
+        text: {
+          pt: "Aprimorei a performance de aplicativos existentes, diminuindo o tempo de resposta para o usuário.",
+          en: "Improved the performance of existing apps, reducing user response time.",
+        },
+      },
+      {
+        id: "smarti-backoffice",
+        text: {
+          pt: "Desenvolvi um backoffice em React.",
+          en: "Built a backoffice in React.",
+        },
+      },
+      {
+        id: "smarti-frontend",
+        text: {
+          pt: "No front-end, implementei novos designs e funcionalidades e atualizei projetos legados em Next.js, React e Vue.js.",
+          en: "On the front end, implemented new designs and features and updated legacy projects in Next.js, React and Vue.js.",
+        },
+      },
+    ],
+    stack: ["React", "React Native", "Next.js", "Vue.js", "AWS", "CQRS"],
   },
 ];
 
@@ -258,101 +335,167 @@ const volunteerSource: ExperienceSource[] = [
     id: "beecrowd",
     role: { pt: "Moderador", en: "Moderator" },
     company: "Beecrowd",
-    location: { pt: "Remoto", en: "Remote" },
-    period: { pt: "Mai. 2020 — Presente", en: "May 2020 — Present" },
-    summary: {
-      pt: "Mentoria e auxílio em resolução de problemas algorítmicos em C, C++, Java e Python.",
-      en: "Mentoring and helping with algorithmic problem solving in C, C++, Java and Python.",
-    },
-    highlights: {
-      pt: [
-        "Mentoria contínua para uma comunidade global de desenvolvedores iniciantes e intermediários.",
-      ],
-      en: [
-        "Ongoing mentoring for a global community of beginner and intermediate developers.",
-      ],
-    },
+    location: remote,
+    years: { start: "2020", end: null },
+    highlights: [
+      {
+        id: "beecrowd-mentoring",
+        text: {
+          pt: "Mentoria e auxílio em resolução de problemas algorítmicos em C, C++, Java e Python.",
+          en: "Mentoring and support in solving algorithmic problems in C, C++, Java and Python.",
+        },
+      },
+    ],
     stack: ["C", "C++", "Java", "Python"],
   },
 ];
 
+const repoLabel: Localized<string> = { pt: "Repositório", en: "Repository" };
+
 const projectsSource: ProjectSource[] = [
+  {
+    id: "webhook-it",
+    title: "webhook-it",
+    summary: {
+      pt: "URLs públicas e estáveis para webhooks, encaminhadas em tempo real para o seu localhost. Um painel interativo no terminal, com histórico e replay em SQLite local.",
+      en: "Stable public URLs for webhooks, forwarded in real time to your localhost. An interactive terminal dashboard, with history and replay in local SQLite.",
+    },
+    stack: ["TypeScript", "Bun", "OpenTUI", "Solid", "SQLite"],
+    links: [
+      {
+        href: "https://carlos3g.github.io/webhook-it/",
+        label: { pt: "Documentação", en: "Documentation" },
+      },
+      { href: "https://github.com/carlos3g/webhook-it", label: repoLabel },
+    ],
+    cover: "terminal",
+  },
+  {
+    id: "shortcutfy",
+    title: "Shortcutfy",
+    summary: {
+      pt: "Extensão para navegadores Chromium com atalhos de teclado para abas, janelas e páginas internas. Sem rastreamento e só com as permissões necessárias.",
+      en: "Extension for Chromium browsers with keyboard shortcuts for tabs, windows and internal pages. No tracking, and only the permissions it needs.",
+    },
+    stack: ["TypeScript", "Manifest V3", "Service Worker"],
+    links: [
+      {
+        href: "https://chromewebstore.google.com/detail/gnmfgiglpeoemibaegemgpggfnboefdg",
+        label: { pt: "Chrome Web Store", en: "Chrome Web Store" },
+      },
+      { href: "https://github.com/carlos3g/shortcutfy", label: repoLabel },
+    ],
+    cover: "image",
+  },
+  {
+    id: "code-style",
+    title: "code-style",
+    summary: {
+      pt: "Minhas convenções de código publicadas como pacotes: ESLint, Prettier, tsconfig e commitlint, com um scaffolder que aplica tudo em um comando.",
+      en: "My code conventions published as packages: ESLint, Prettier, tsconfig and commitlint, with a scaffolder that applies them in one command.",
+    },
+    stack: ["TypeScript", "ESLint", "Prettier", "commitlint"],
+    links: [
+      {
+        href: "https://www.npmjs.com/package/@carlos3g/eslint-config",
+        label: { pt: "npm", en: "npm" },
+      },
+      { href: "https://github.com/carlos3g/code-style", label: repoLabel },
+    ],
+    cover: "code",
+  },
+  {
+    id: "react-native-playground",
+    title: "react-native-playground",
+    summary: {
+      pt: "Laboratório em Expo e React Native para animações, gestos, microinterações, gráficos, shaders e câmera.",
+      en: "Expo and React Native lab for animations, gestures, micro-interactions, charts, shaders and camera.",
+    },
+    stack: ["React Native", "Expo", "Reanimated", "Skia"],
+    links: [
+      {
+        href: "https://github.com/carlos3g/react-native-playground",
+        label: repoLabel,
+      },
+    ],
+    cover: "type",
+  },
   {
     id: "echoes",
     title: "Echoes",
-    role: {
-      pt: "Fullstack & Arquitetura",
-      en: "Fullstack & Architecture",
-    },
-    period: { pt: "Jul. 2024 — Presente", en: "Jul 2024 — Present" },
     summary: {
-      pt: "Plataforma social construída do zero — desde a modelagem do banco até a infra automatizada.",
-      en: "Social platform built from scratch — from database modeling to automated infrastructure.",
+      pt: "Plataforma social construída do zero: modelagem de banco, arquitetura de sistemas e ambientes de desenvolvimento com Docker e Terraform.",
+      en: "Social platform built from scratch: database modeling, systems architecture and development environments with Docker and Terraform.",
     },
-    narrative: {
-      pt: "Desenvolvimento Fullstack com NestJS, ReactJS, Next.js, React Native e PostgreSQL. Modelagem de banco e arquitetura de sistemas. Ambientes de desenvolvimento criados com Docker e Terraform.",
-      en: "Fullstack development with NestJS, ReactJS, Next.js, React Native and PostgreSQL. Database modeling and systems architecture. Development environments built with Docker and Terraform.",
-    },
-    stack: [
-      "TypeScript",
-      "NestJS",
-      "React Native",
-      "ReactJS",
-      "PostgreSQL",
-      "Docker",
-      "Terraform",
-      "AWS SQS",
-      "AWS S3",
-    ],
-    highlights: {
-      pt: [
-        "Modelagem de banco de dados e desenho da arquitetura geral.",
-        "Infraestrutura como código com Terraform.",
-        "Ambientes locais reprodutíveis com Docker.",
-      ],
-      en: [
-        "Database modeling and overall architecture design.",
-        "Infrastructure as code with Terraform.",
-        "Reproducible local environments with Docker.",
-      ],
-    },
-    link: {
-      href: "https://github.com/carlos3g/echoes",
-      label: "github.com/carlos3g/echoes",
-    },
+    stack: ["TypeScript", "NestJS", "React Native", "React", "PostgreSQL"],
+    // The repository is private, so there is nothing public to link to yet.
+    links: [],
+    cover: null,
   },
 ];
 
 const educationSource: EducationSource[] = [
   {
+    id: "ads",
     institution: "Instituto Federal do Piauí",
     course: {
       pt: "Análise e Desenvolvimento de Sistemas",
       en: "Systems Analysis and Development",
     },
-    location: "Pedro II — PI",
-    period: { pt: "Mar. 2022 — Dez. 2025", en: "Mar 2022 — Dec 2025" },
+    location: "Pedro II, PI",
+    years: { start: "2022", end: "2025" },
   },
   {
+    id: "tecnico",
     institution: "Instituto Federal do Piauí",
     course: {
       pt: "Curso técnico em informática",
-      en: "Technical Course in Computing",
+      en: "Technical Course in Computer Science",
     },
-    location: "Pedro II — PI",
-    period: { pt: "Mar. 2019 — Dez. 2021", en: "Mar 2019 — Dec 2021" },
+    location: "Pedro II, PI",
+    years: { start: "2019", end: "2021" },
   },
 ];
 
 const skillGroupsSource: SkillGroupSource[] = [
   {
-    label: { pt: "Cloud & Infra", en: "Cloud & Infra" },
+    id: "build",
+    label: { pt: "Construir", en: "Build" },
+    items: [
+      "TypeScript",
+      "JavaScript",
+      "PHP",
+      "SQL",
+      "Python",
+      "Java",
+      "C#",
+      "Node.js",
+      "Express.js",
+      "NestJS",
+      "Laravel",
+      "React",
+      "Next.js",
+      "Vue.js",
+      "React Native",
+      "Expo",
+      "React Query",
+      "Redux",
+      "Zustand",
+      "shadcn/ui",
+      "PostgreSQL",
+      "MySQL",
+      "Redis",
+    ],
+  },
+  {
+    id: "operate",
+    label: { pt: "Operar", en: "Operate" },
     items: [
       "AWS EC2",
-      "AWS SQS",
-      "AWS S3",
-      "AWS SES",
-      "AWS Lambda",
+      "SQS",
+      "S3",
+      "SES",
+      "Lambda",
       "Auto Scaling Groups",
       "CodeDeploy",
       "CloudWatch",
@@ -362,53 +505,14 @@ const skillGroupsSource: SkillGroupSource[] = [
       "GitLab CI",
       "Jenkins",
       "Fastlane",
+      "Vercel",
+      "Jaeger",
+      "Sentry",
     ],
   },
   {
-    label: { pt: "Observabilidade", en: "Observability" },
-    items: ["Jaeger Tracing", "Sentry", "Google Analytics", "CloudWatch"],
-  },
-  {
-    label: { pt: "Linguagens", en: "Languages" },
-    items: [
-      "TypeScript",
-      "JavaScript",
-      "PHP",
-      "SQL",
-      "Python",
-      "Java",
-      "C#",
-      "HTML/CSS",
-    ],
-  },
-  {
-    label: { pt: "Frameworks", en: "Frameworks" },
-    items: [
-      "Node.js",
-      "Nest.js",
-      "Next.js",
-      "React",
-      "React Native",
-      "Expo",
-      "Laravel",
-    ],
-  },
-  {
-    label: { pt: "Bancos de Dados", en: "Databases" },
-    items: ["PostgreSQL", "MySQL", "Redis"],
-  },
-  {
-    label: { pt: "Bibliotecas", en: "Libraries" },
-    items: [
-      "React Query",
-      "Redux",
-      "Redux Toolkit",
-      "Zustand",
-      "shadcn/ui",
-    ],
-  },
-  {
-    label: { pt: "Testes", en: "Testing" },
+    id: "test",
+    label: { pt: "Testar", en: "Test" },
     items: [
       "Jest",
       "Vitest",
@@ -424,6 +528,11 @@ const skillGroupsSource: SkillGroupSource[] = [
   },
 ];
 
+function formatYears({ start, end }: Years, locale: Locale): string {
+  if (start === end) return start;
+  return `${start} – ${end ?? (locale === "pt" ? "presente" : "present")}`;
+}
+
 function localizeExperience(
   src: ExperienceSource,
   locale: Locale
@@ -433,60 +542,21 @@ function localizeExperience(
     role: L(src.role, locale),
     company: src.company,
     location: L(src.location, locale),
-    period: L(src.period, locale),
-    summary: L(src.summary, locale),
-    highlights: L(src.highlights, locale),
+    period: formatYears(src.years, locale),
+    highlights: src.highlights.map((h) => ({
+      id: h.id,
+      text: L(h.text, locale),
+    })),
     stack: src.stack,
   };
-}
-
-function localizeProject(src: ProjectSource, locale: Locale): ProjectItem {
-  return {
-    id: src.id,
-    title: src.title,
-    role: L(src.role, locale),
-    period: L(src.period, locale),
-    summary: L(src.summary, locale),
-    narrative: L(src.narrative, locale),
-    stack: src.stack,
-    highlights: L(src.highlights, locale),
-    link: src.link,
-  };
-}
-
-function localizeEducation(
-  src: EducationSource,
-  locale: Locale
-): EducationItem {
-  return {
-    institution: src.institution,
-    course: L(src.course, locale),
-    location: src.location,
-    period: L(src.period, locale),
-  };
-}
-
-function localizeSkillGroup(
-  src: SkillGroupSource,
-  locale: Locale
-): SkillGroup {
-  return { label: L(src.label, locale), items: src.items };
 }
 
 export function getProfile(locale: Locale): Profile {
   return {
-    name: profileSource.name,
-    handle: profileSource.handle,
+    ...profileSource,
     title: L(profileSource.title, locale),
     tagline: L(profileSource.tagline, locale),
     summary: L(profileSource.summary, locale),
-    focus: L(profileSource.focus, locale),
-    email: profileSource.email,
-    phone: profileSource.phone,
-    whatsapp: profileSource.whatsapp,
-    github: profileSource.github,
-    linkedin: profileSource.linkedin,
-    cvUrl: profileSource.cvUrl,
   };
 }
 
@@ -499,16 +569,23 @@ export function getVolunteer(locale: Locale): ExperienceItem[] {
 }
 
 export function getProjects(locale: Locale): ProjectItem[] {
-  return projectsSource.map((p) => localizeProject(p, locale));
+  return projectsSource.map((p) => ({
+    ...p,
+    summary: L(p.summary, locale),
+    links: p.links.map((l) => ({ href: l.href, label: L(l.label, locale) })),
+  }));
 }
 
 export function getEducation(locale: Locale): EducationItem[] {
-  return educationSource.map((e) => localizeEducation(e, locale));
+  return educationSource.map((e) => ({
+    id: e.id,
+    institution: e.institution,
+    course: L(e.course, locale),
+    location: e.location,
+    period: formatYears(e.years, locale),
+  }));
 }
 
 export function getSkillGroups(locale: Locale): SkillGroup[] {
-  return skillGroupsSource.map((g) => localizeSkillGroup(g, locale));
+  return skillGroupsSource.map((g) => ({ ...g, label: L(g.label, locale) }));
 }
-
-export const experienceCount = experienceSource.length;
-export const projectsCount = projectsSource.length;

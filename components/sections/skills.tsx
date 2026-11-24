@@ -1,50 +1,28 @@
 import { getLocale, getTranslations } from "next-intl/server";
-import { Divider } from "@/components/ornaments/divider";
-import { Badge } from "@/components/ui/badge";
 import { getSkillGroups } from "@/lib/portfolio-data";
 import type { Locale } from "@/i18n/routing";
 
 export async function Skills() {
   const locale = (await getLocale()) as Locale;
-  const skillGroups = getSkillGroups(locale);
+  const groups = getSkillGroups(locale);
   const t = await getTranslations("skills");
 
   return (
-    <section id="skills" className="relative py-32">
-      <Divider ornament />
-      <div className="container">
-        <div className="mb-16 max-w-3xl">
-          <div className="eyebrow mb-6">
-            <span>{t("eyebrow")}</span>
-          </div>
-          <h2 className="font-serif text-4xl leading-tight tracking-tight text-balance sm:text-5xl">
-            {t("headingLine1")}<br />
-            <span className="gold-text">{t("headingLine2")}</span>
-          </h2>
-          <p className="mt-6 max-w-xl text-silver">
-            {t("subtitle")}
-          </p>
-        </div>
-
-        <div className="grid gap-px overflow-hidden rounded-sm border border-magnus/20 bg-magnus/10 md:grid-cols-2">
-          {skillGroups.map((group) => (
+    <section id="skills" className="section">
+      <div className="wrap split">
+        <h2 className="section-title">{t("heading")}</h2>
+        <div className="grid gap-10">
+          {groups.map((g) => (
             <div
-              key={group.label}
-              className="group relative flex flex-col gap-5 bg-charcoal/80 p-8 transition-colors hover:bg-charcoal"
+              key={g.id}
+              className="grid gap-2 min-[561px]:grid-cols-[minmax(0,1fr)_minmax(0,4fr)] min-[561px]:gap-6"
             >
-              <div className="flex items-baseline justify-between">
-                <h3 className="font-serif text-2xl text-ivory">
-                  {group.label}
-                </h3>
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-frost">
-                  {t("itemsLabel", { count: group.items.length })}
-                </span>
-              </div>
-              <ul className="flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <Badge key={item} variant="steel">
-                    {item}
-                  </Badge>
+              <h3 className="text-xl font-bold tracking-[-0.02em]">
+                {g.label}
+              </h3>
+              <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
+                {g.items.map((item) => (
+                  <li key={item}>{item}</li>
                 ))}
               </ul>
             </div>

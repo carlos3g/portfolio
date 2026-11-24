@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Schibsted_Grotesk } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Analytics } from "@vercel/analytics/next";
@@ -13,23 +13,9 @@ import { getStructuredData } from "@/lib/structured-data";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 
-const sans = Plus_Jakarta_Sans({
+const sans = Schibsted_Grotesk({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const serif = Fraunces({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const mono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-mono",
   display: "swap",
 });
 
@@ -93,7 +79,7 @@ export async function generateMetadata({
   };
 }
 
-const themeBootScript = `(()=>{try{var t=localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});if(t!=='light'&&t!=='dark')t='dark';document.documentElement.classList.remove('light','dark');document.documentElement.classList.add(t);document.documentElement.style.colorScheme=t;}catch(e){document.documentElement.classList.add('dark');}})();`;
+const themeBootScript = `(()=>{var t='light';try{if(localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)})==='dark')t='dark';}catch(e){}var r=document.documentElement;r.classList.remove('light','dark');r.classList.add(t);r.style.colorScheme=t;})();`;
 
 export default async function LocaleLayout({
   children,
@@ -119,9 +105,7 @@ export default async function LocaleLayout({
           }}
         />
       </head>
-      <body
-        className={`${sans.variable} ${serif.variable} ${mono.variable} noise-overlay`}
-      >
+      <body className={sans.variable}>
         <NextIntlClientProvider>
           <ThemeBoot />
           {children}

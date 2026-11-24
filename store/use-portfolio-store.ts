@@ -16,23 +16,18 @@ export type { Theme };
 
 interface PortfolioState {
   activeSection: SectionId;
-  selectedProjectId: string | null;
-  selectedExperienceId: string | null;
   theme: Theme;
   setActiveSection: (id: SectionId) => void;
-  openProject: (id: string) => void;
-  closeProject: () => void;
-  openExperience: (id: string) => void;
-  closeExperience: () => void;
   setTheme: (t: Theme) => void;
   toggleTheme: () => void;
 }
 
-function applyThemeClass(theme: Theme) {
+export function applyTheme(theme: Theme) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
   root.classList.remove("dark", "light");
   root.classList.add(theme);
+  root.style.colorScheme = theme;
 }
 
 function persistTheme(theme: Theme) {
@@ -46,25 +41,12 @@ function persistTheme(theme: Theme) {
 
 export const usePortfolioStore = create<PortfolioState>((set, get) => ({
   activeSection: "hero",
-  selectedProjectId: null,
-  selectedExperienceId: null,
-  theme: "dark",
+  theme: "light",
   setActiveSection: (id) => set({ activeSection: id }),
-  openProject: (id) => set({ selectedProjectId: id }),
-  closeProject: () => set({ selectedProjectId: null }),
-  openExperience: (id) => set({ selectedExperienceId: id }),
-  closeExperience: () => set({ selectedExperienceId: null }),
   setTheme: (t) => {
-    applyThemeClass(t);
+    applyTheme(t);
     persistTheme(t);
     set({ theme: t });
   },
-  toggleTheme: () => {
-    const next: Theme = get().theme === "dark" ? "light" : "dark";
-    applyThemeClass(next);
-    persistTheme(next);
-    set({ theme: next });
-  },
+  toggleTheme: () => get().setTheme(get().theme === "dark" ? "light" : "dark"),
 }));
-
-export { THEME_STORAGE_KEY };

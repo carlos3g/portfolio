@@ -5,103 +5,70 @@
     "ogTitle": "Carlos Mesquita — Fullstack Developer",
     "ogDescription": "Scalable systems in TypeScript, Node.js, React and AWS."
   },
-  "nav": {
+  "header": {
+    "skip": "Skip to content",
+    "nav": "Main",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "cv": "CV",
+    "cvLabel": "Download CV",
     "links": {
-      "about": "About",
       "experience": "Experience",
       "projects": "Projects",
       "skills": "Skills",
-      "education": "Education",
       "contact": "Contact"
-    },
-    "cta": "Contact"
+    }
   },
-  "themeToggle": {
-    "switchToLight": "Switch to light theme",
-    "switchToDark": "Switch to dark theme",
-    "light": "Light",
-    "dark": "Dark"
-  },
-  "localeToggle": {
-    "label": "Change language",
-    "pt": "PT",
-    "en": "EN"
-  },
-  "hero": {
-    "ctaProjects": "See projects",
-    "ctaCv": "Download CV",
-    "metrics": {
-      "yearsCoding": "Years coding",
-      "companies": "Companies in production",
-      "stacks": "Core stacks",
-      "cloud": "Cloud"
-    },
-    "continue": "continue"
+  "themeToggle": { "label": "Toggle light and dark theme" },
+  "localeToggle": { "label": "PT: mudar para português", "short": "PT" },
+  "hero": { "ctaCv": "Download CV", "ctaContact": "Get in touch" },
+  "map": {
+    "title": "Systems I have built",
+    "subtitle": "Parts of different projects on one map. Pick one to see what I did.",
+    "label": "Systems map"
   },
   "about": {
-    "eyebrow": "01 · About",
-    "headingLine1": "Software engineering",
-    "headingLine2": "with a focus on scale.",
+    "heading": "About me",
     "facts": {
-      "current": "Currently",
-      "currentValue": "Beehive News · Mid-level",
       "based": "Based in",
-      "basedValue": "São Paulo — SP, Brazil",
+      "basedValue": "São Paulo, Brazil",
       "modality": "Setup",
       "modalityValue": "Remote",
-      "available": "Open to",
-      "availableValue": "Selected opportunities"
+      "available": "Availability",
+      "availableValue": "Open to proposals"
     }
   },
   "experience": {
-    "eyebrow": "02 · Experience",
-    "headingLine1": "Professional journey",
-    "headingLine2": "from code to production.",
-    "positionsLabel": "{count} positions · professional",
-    "volunteerLabel": "— volunteer —",
-    "deliveriesLabel": "— deliverables —",
-    "stackLabel": "— stack —"
+    "heading": "Where I have shipped code to production",
+    "subtitle": "The main deliverables at each company.",
+    "showMore": "Show {count} more",
+    "showLess": "Show less",
+    "stack": "Stack",
+    "volunteer": "volunteering"
   },
   "projects": {
-    "eyebrow": "03 · Projects",
-    "headingLine1": "Personal projects.",
-    "headingLine2": "Curiosity, applied.",
-    "countLabel": "{count, plural, =1 {# project} other {# projects}} · featured",
-    "highlightsLabel": "— highlights —",
-    "stackLabel": "— stack —"
+    "heading": "Projects I maintain",
+    "subtitle": "My own tools and experiments, from the terminal to the phone.",
+    "also": "Also working on",
+    "stack": "Stack",
+    "shortcutfyAlt": "Shortcutfy promotional art"
   },
   "skills": {
-    "eyebrow": "04 · Skills",
-    "headingLine1": "Sharp tools.",
-    "headingLine2": "Chosen with care.",
-    "subtitle": "Stack I use in production. No buzzwords — just what ships.",
-    "itemsLabel": "{count} items"
+    "heading": "What I work with"
   },
-  "education": {
-    "eyebrow": "05 · Education",
-    "headingLine1": "Academic background.",
-    "headingLine2": "Foundation and continuity."
-  },
+  "education": { "heading": "Education" },
   "contact": {
-    "eyebrow": "06 · Contact",
-    "headingLine1": "Want to talk?",
-    "headingLine2": "I'm open to proposals.",
-    "subtitle": "Looking for someone to build from scratch, scale a platform or fix a recurring pain in production? Send a message.",
-    "ctaEmail": "Send email",
-    "ctaCv": "See resume",
-    "channels": {
-      "email": "Email",
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "whatsapp": "WhatsApp"
-    }
+    "heading": "Let's talk",
+    "subtitle": "To build from scratch, scale a platform or fix a recurring production problem.",
+    "copy": "Copy email",
+    "copied": "Email copied",
+    "selected": "Couldn't copy. The email is selected",
+    "cv": "Download CV"
   },
-  "footer": {
-    "github": "github",
-    "linkedin": "linkedin",
-    "toTop": "to top ↑"
-  },
-  "dialog": {
-    "close": "Close"
+  "footer": { "toTop": "Back to top" },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This address doesn't exist or has moved.",
+    "back": "Go to the home page"
   }
 }

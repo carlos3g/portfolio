@@ -29,7 +29,9 @@ Single-page portfolio (Next.js 15 App Router, React 19, TypeScript strict, Tailw
 - The root layout (`app/[locale]/layout.tsx`) calls `setRequestLocale(locale)` (required for static rendering with `generateStaticParams`) and wraps children in `<NextIntlClientProvider>` so client components inherit messages without re-passing them. **Pages must call `setRequestLocale(locale)` too.**
 - `generateMetadata` produces locale-aware `<title>`, OG tags, and `alternates.languages` for `hreflang`.
 - The build pre-renders `/` (PT) and `/en` as static HTML — keep that working: don't introduce dynamic APIs in the layout/page without a deliberate reason.
-- `LocaleToggle` (`components/locale-toggle.tsx`) uses next-intl's `useRouter().replace(pathname, { locale })` to swap idioms while preserving the path.
+- Unknown paths hit `app/[locale]/[...rest]/page.tsx`, which calls `notFound()` and renders the localized `not-found.tsx`. Next renders that page on the client, so `ThemeBoot` applies the theme there.
+- The middleware matcher skips `/{pt,en}/opengraph-image` and `twitter-image`, so social crawlers get them without a redirect. Update it if a locale is added.
+- `LocaleToggle` (`components/locale-toggle.tsx`) is a locale-aware `Link` to the same pathname, so it works without JS.
 
 ### Content is data, not markup — but bilingual
 
@@ -38,44 +40,43 @@ Single-page portfolio (Next.js 15 App Router, React 19, TypeScript strict, Tailw
 **Never import the raw `*Source` data.** Section components call the locale-aware helpers, which return objects with all strings already resolved:
 
 - `getProfile(locale)`, `getExperience(locale)`, `getVolunteer(locale)`, `getProjects(locale)`, `getEducation(locale)`, `getSkillGroups(locale)`.
-- `experienceCount` and `projectsCount` are exported as plain numbers for places that just need a count without the data.
+- Experience `highlights` are `{ id, text }` in display order; the first three are visible and the rest sit in a `<details>`, so all of them are in the HTML.
+- Periods are stored as `years: { start, end }` (`end: null` means ongoing) and formatted by the helpers.
+
+`lib/systems-map.ts` builds the hero map (`getSystemsMap(locale)`). Its nodes reference highlights by `id`; an unknown id throws and fails the static build. Edges declare which side of a node the connector is drawn from; connectors are pure CSS in the grid gaps (`.map-link`).
 
 When adding new content, add **both `pt` and `en`** to every `Localized` field — TypeScript will enforce it.
 
 ### Server vs. client components
 
-Sections that don't need browser state are **async Server Components** that call `getLocale()` + `getTranslations()`: `Hero`, `About`, `Skills`, `Education`, `Contact`, `Footer`.
+All sections are **async Server Components** that call `getLocale()` + `getTranslations()`.
 
-Sections with Zustand-driven dialogs are Client Components and use `useLocale()` + `useTranslations()`: `Experience`, `Projects`. They wrap data lookups in `useMemo(() => getX(locale), [locale])` so the list re-localizes on language switch without a remount.
-
-`Nav`, `ThemeToggle`, `LocaleToggle`, `ThemeBoot`, and `components/ui/dialog.tsx` are also client components.
+Client components: `SiteHeader`, `SystemsMap` (receives already-localized data as props), `CopyEmail`, `ThemeToggle`, `LocaleToggle`, `ThemeBoot`.
 
 ### Zustand store
 
 `store/use-portfolio-store.ts` owns:
 
-- `activeSection` — driven by an `IntersectionObserver` in `components/nav.tsx` (rootMargin `-45% 0px -45% 0px`); used to highlight the current nav link.
-- `selectedProjectId` / `selectedExperienceId` — modal-style detail views.
-- `theme` (`"dark" | "light"`) — toggled via `components/theme-toggle.tsx`, persisted to `localStorage` under key `c3g-theme` (exported as `THEME_STORAGE_KEY`).
+- `activeSection` — driven by an `IntersectionObserver` in `components/site-header.tsx` (rootMargin `-45% 0px -45% 0px`); highlights the current nav link.
+- `theme` (`"light" | "dark"`, default light) — toggled via `components/theme-toggle.tsx`, persisted to `localStorage` under `c3g-theme` (`THEME_STORAGE_KEY`). `applyTheme` sets both the `html` class and `color-scheme`.
 
 The store does **not** hold the locale — that comes from `next-intl` (URL is the source of truth).
 
 ### Theming — class-based with FOUC-prevention boot script
 
-Tailwind is configured with `darkMode: "class"`. Two parallel token systems live in `app/globals.css` under `:root, html.dark` and `html.light`:
+Tailwind is configured with `darkMode: "class"`. There is a single token set in `app/globals.css` (`:root` for light, `html.dark` for dark): `--bg`, `--surface`, `--ink`, `--muted`, `--line`, `--accent`, `--on-accent`, `--soft`, `--panel*`. `tailwind.config.ts` exposes them as colors and also aliases the shadcn names (`background`, `primary`, `border`, ...) to the same tokens.
 
-1. **Brand tokens** (`--c-magnus`, `--c-obsidian`, `--c-ivory`, etc., as raw `R G B` triplets) — exposed via `tailwind.config.ts` as named colors (`magnus`, `obsidian`, `ivory`, `silver`, `frost`, `crimson`, `steel`, `charcoal`).
-2. **shadcn-compatible HSL tokens** (`--background`, `--foreground`, `--primary`, etc.) — used by the shadcn UI primitives in `components/ui/`.
+Text colors are checked for AA contrast, so don't lighten text with opacity.
 
 `app/[locale]/layout.tsx` injects an inline `themeBootScript` in `<head>` that reads `localStorage` and sets `html.light`/`html.dark` **before** React hydrates, preventing a flash. `components/theme-boot.tsx` then syncs the Zustand store to that initial DOM state on mount.
 
 The storage key (`THEME_STORAGE_KEY`) lives in `lib/theme-storage.ts` — a non-`"use client"` module — and is imported by the (server) layout, the (client) store, and the (client) theme-boot. It must stay there: importing a plain string constant from a `"use client"` module into a Server Component yields a client-reference proxy, not the literal value, which silently serialized as `undefined` inside the inline boot script and broke hydration. If you rename the key or change theme class names, update `lib/theme-storage.ts`, the layout boot script, and `theme-boot.tsx` together.
 
-Custom utility classes worth knowing live in the `@layer components` block of `globals.css`: `.gold-text`, `.eyebrow`, `.section-label`, `.imperial-card` (the standard card with hover-revealed gold gradient border), `.hero-grid`, `.noise-overlay`.
+Custom classes live in `@layer components` of `globals.css`: `.wrap`, `.section`, `.split` (sticky-heading layout), `.section-title`, `.text-link`, `.delivery-list`, `.map-*`. The only font is Schibsted Grotesk (`next/font`).
 
 ### shadcn/ui
 
-`components.json` is configured (style `new-york`, base color `neutral`, icon library `lucide`). Currently only `button`, `badge`, and `dialog` are installed in `components/ui/`. Add new primitives via `npx shadcn@latest add <component>` rather than hand-writing them. The `cn()` helper lives at `lib/utils.ts`. Note: `dialog.tsx` was modified to translate the close button's screen-reader label via `useTranslations("dialog")` — re-applying that change is needed if the primitive is regenerated.
+`components.json` is configured (style `new-york`, base color `neutral`, icon library `lucide`). Currently only `button` is installed in `components/ui/`. Add new primitives via `npx shadcn@latest add <component>` rather than hand-writing them. The `cn()` helper lives at `lib/utils.ts`.
 
 ### Path alias
 

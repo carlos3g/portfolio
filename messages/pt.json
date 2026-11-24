@@ -5,103 +5,70 @@
     "ogTitle": "Carlos Mesquita — Desenvolvedor Fullstack",
     "ogDescription": "Sistemas escaláveis em TypeScript, Node.js, React e AWS."
   },
-  "nav": {
+  "header": {
+    "skip": "Pular para o conteúdo",
+    "nav": "Principal",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "cv": "CV",
+    "cvLabel": "Baixar CV",
     "links": {
-      "about": "Sobre",
       "experience": "Experiência",
       "projects": "Projetos",
       "skills": "Skills",
-      "education": "Formação",
       "contact": "Contato"
-    },
-    "cta": "Contato"
+    }
   },
-  "themeToggle": {
-    "switchToLight": "Ativar tema claro",
-    "switchToDark": "Ativar tema escuro",
-    "light": "Claro",
-    "dark": "Escuro"
-  },
-  "localeToggle": {
-    "label": "Mudar idioma",
-    "pt": "PT",
-    "en": "EN"
-  },
-  "hero": {
-    "ctaProjects": "Ver projetos",
-    "ctaCv": "Baixar CV",
-    "metrics": {
-      "yearsCoding": "Anos programando",
-      "companies": "Empresas em produção",
-      "stacks": "Stacks principais",
-      "cloud": "Cloud"
-    },
-    "continue": "continuar"
+  "themeToggle": { "label": "Alternar tema claro e escuro" },
+  "localeToggle": { "label": "EN: switch to English", "short": "EN" },
+  "hero": { "ctaCv": "Baixar CV", "ctaContact": "Entrar em contato" },
+  "map": {
+    "title": "Sistemas que eu já construí",
+    "subtitle": "Partes de projetos diferentes em um só mapa. Escolha uma para ver o que eu fiz.",
+    "label": "Mapa de sistemas"
   },
   "about": {
-    "eyebrow": "01 · Sobre",
-    "headingLine1": "Engenharia de software",
-    "headingLine2": "com foco em escala.",
+    "heading": "Sobre mim",
     "facts": {
-      "current": "Atualmente",
-      "currentValue": "Beehive News · Pleno",
-      "based": "Baseado em",
-      "basedValue": "São Paulo — SP, Brasil",
+      "based": "Onde estou",
+      "basedValue": "São Paulo, SP",
       "modality": "Modalidade",
       "modalityValue": "Remoto",
-      "available": "Disponível para",
-      "availableValue": "Oportunidades selecionadas"
+      "available": "Disponibilidade",
+      "availableValue": "Aberto a propostas"
     }
   },
   "experience": {
-    "eyebrow": "02 · Experiência",
-    "headingLine1": "Trajetória profissional",
-    "headingLine2": "do código à produção.",
-    "positionsLabel": "{count} posições · profissionais",
-    "volunteerLabel": "— voluntariado —",
-    "deliveriesLabel": "— entregas —",
-    "stackLabel": "— stack —"
+    "heading": "Onde eu já coloquei código em produção",
+    "subtitle": "As principais entregas de cada empresa.",
+    "showMore": "Ver mais {count}",
+    "showLess": "Ver menos",
+    "stack": "Stack",
+    "volunteer": "voluntariado"
   },
   "projects": {
-    "eyebrow": "03 · Projetos",
-    "headingLine1": "Projetos pessoais.",
-    "headingLine2": "Curiosidade aplicada.",
-    "countLabel": "{count, plural, =1 {# projeto} other {# projetos}} · em destaque",
-    "highlightsLabel": "— destaques —",
-    "stackLabel": "— stack —"
+    "heading": "Projetos que eu mantenho",
+    "subtitle": "Ferramentas e experimentos meus, do terminal ao celular.",
+    "also": "Também trabalhando em",
+    "stack": "Stack",
+    "shortcutfyAlt": "Arte de divulgação do Shortcutfy"
   },
   "skills": {
-    "eyebrow": "04 · Skills",
-    "headingLine1": "Ferramentas afiadas.",
-    "headingLine2": "Escolhidas com critério.",
-    "subtitle": "Stack que uso em produção. Sem buzzwords — só o que entrega.",
-    "itemsLabel": "{count} itens"
+    "heading": "Com o que eu trabalho"
   },
-  "education": {
-    "eyebrow": "05 · Formação",
-    "headingLine1": "Formação acadêmica.",
-    "headingLine2": "Base e continuidade."
-  },
+  "education": { "heading": "Formação" },
   "contact": {
-    "eyebrow": "06 · Contato",
-    "headingLine1": "Vamos conversar?",
-    "headingLine2": "Tô aberto a propostas.",
-    "subtitle": "Procurando alguém pra construir do zero, escalar uma plataforma ou consertar uma dor recorrente em produção? Manda mensagem.",
-    "ctaEmail": "Enviar e-mail",
-    "ctaCv": "Ver currículo",
-    "channels": {
-      "email": "E-mail",
-      "github": "GitHub",
-      "linkedin": "LinkedIn",
-      "whatsapp": "WhatsApp"
-    }
+    "heading": "Vamos conversar",
+    "subtitle": "Para construir do zero, escalar uma plataforma ou resolver um problema recorrente em produção.",
+    "copy": "Copiar e-mail",
+    "copied": "E-mail copiado",
+    "selected": "Não consegui copiar. O e-mail está selecionado",
+    "cv": "Baixar CV"
   },
-  "footer": {
-    "github": "github",
-    "linkedin": "linkedin",
-    "toTop": "ao topo ↑"
-  },
-  "dialog": {
-    "close": "Fechar"
+  "footer": { "toTop": "Voltar ao topo" },
+  "notFound": {
+    "title": "Página não encontrada",
+    "text": "Esse endereço não existe ou mudou de lugar.",
+    "back": "Ir para o início"
   }
 }

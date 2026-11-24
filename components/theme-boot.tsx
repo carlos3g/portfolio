@@ -1,32 +1,32 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePortfolioStore } from "@/store/use-portfolio-store";
+import { applyTheme, usePortfolioStore } from "@/store/use-portfolio-store";
 import { THEME_STORAGE_KEY, type Theme } from "@/lib/theme-storage";
 
+/**
+ * Syncs the store with the class the inline boot script applied. Next renders
+ * not-found pages on the client, where that script does not run, so the theme
+ * is applied here when the class is missing.
+ */
 export function ThemeBoot() {
-  const setTheme = usePortfolioStore((s) => s.setTheme);
-
   useEffect(() => {
-    let stored: Theme | null = null;
-    try {
-      const raw = window.localStorage.getItem(THEME_STORAGE_KEY);
-      if (raw === "dark" || raw === "light") stored = raw;
-    } catch {
-      /* ignore */
+    const { classList } = document.documentElement;
+    let theme: Theme = classList.contains("dark") ? "dark" : "light";
+
+    if (!classList.contains("dark") && !classList.contains("light")) {
+      try {
+        if (window.localStorage.getItem(THEME_STORAGE_KEY) === "dark") {
+          theme = "dark";
+        }
+      } catch {
+        /* ignore */
+      }
+      applyTheme(theme);
     }
 
-    const current = document.documentElement.classList.contains("light")
-      ? "light"
-      : "dark";
-    const next = stored ?? current;
-
-    if (next !== current) {
-      setTheme(next);
-    } else {
-      usePortfolioStore.setState({ theme: next });
-    }
-  }, [setTheme]);
+    usePortfolioStore.setState({ theme });
+  }, []);
 
   return null;
 }

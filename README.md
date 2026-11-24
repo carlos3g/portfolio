@@ -4,7 +4,7 @@ Personal portfolio for **Carlos Mesquita** — Fullstack Developer working with 
 
 🌐 Live: **[carlos3g.dev](https://carlos3g.dev)** &nbsp;·&nbsp; 🇧🇷 [Português](https://carlos3g.dev/) &nbsp;·&nbsp; 🇺🇸 [English](https://carlos3g.dev/en)
 
-![Hero — Português](docs/screenshots/hero-pt.png)
+![Hero — Português](docs/screenshots/hero-pt-light.png)
 
 ---
 
@@ -26,8 +26,8 @@ Personal portfolio for **Carlos Mesquita** — Fullstack Developer working with 
 ### Hero — English
 ![Hero — English](docs/screenshots/hero-en.png)
 
-### Light theme
-![Hero — Light theme](docs/screenshots/hero-pt-light.png)
+### Dark theme
+![Hero — Dark theme](docs/screenshots/hero-pt.png)
 
 ### About
 ![Sobre](docs/screenshots/about-pt.png)
@@ -62,15 +62,17 @@ yarn start
 app/[locale]/            # Localized App Router segment (root layout + page)
 components/
   sections/              # Hero, About, Experience, Projects, Skills, Education, Contact
-  ui/                    # shadcn primitives (button, badge, dialog)
-  ornaments/             # Decorative SVG bits
-  nav.tsx                # Top nav with active-section tracking
+  ui/                    # shadcn primitives (button)
+  site-header.tsx        # Top nav, mobile menu, active-section tracking
+  systems-map.tsx        # Interactive map of systems in the hero
+  project-cover.tsx      # Project card covers
   locale-toggle.tsx      # PT / EN switch (preserves pathname)
   theme-toggle.tsx       # Dark / light switch
 i18n/                    # next-intl routing + request config + locale-aware navigation
 messages/{pt,en}.json    # UI strings catalog
 lib/portfolio-data.ts    # Single source of truth for content (bilingual)
-store/                   # Zustand store (active section, modals, theme)
+lib/systems-map.ts       # Hero map, built from the same content
+store/                   # Zustand store (active section, theme)
 middleware.ts            # next-intl locale middleware
 ```
 
