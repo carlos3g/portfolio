@@ -2,7 +2,7 @@
 
 Personal portfolio for **Carlos Mesquita** — Fullstack Developer working with TypeScript, Node.js, React, React Native and AWS.
 
-🌐 Live: **[www.carlos3g.dev](https://www.carlos3g.dev)** &nbsp;·&nbsp; 🇧🇷 [Português](https://www.carlos3g.dev/) &nbsp;·&nbsp; 🇺🇸 [English](https://www.carlos3g.dev/en)
+🌐 Live: **[carlos3g.dev](https://carlos3g.dev)** &nbsp;·&nbsp; 🇧🇷 [Português](https://carlos3g.dev/) &nbsp;·&nbsp; 🇺🇸 [English](https://carlos3g.dev/en)
 
 ![Hero — Português](docs/screenshots/hero-pt.png)
 
@@ -19,7 +19,7 @@ Personal portfolio for **Carlos Mesquita** — Fullstack Developer working with 
 - ⚡ **Static rendering** — both locales pre-rendered at build time, middleware only handles redirects.
 - 📱 **Mobile-first responsive** layout, accessible nav with active-section tracking via `IntersectionObserver`.
 - 📊 **Vercel Analytics** + **Speed Insights** wired into the root layout.
-- 🚀 **CI/CD** on GitHub Actions — production deploys on push to `main`, preview deploys on every PR.
+- 🚀 **CI/CD** — GitHub Actions builds every push and PR; Vercel's Git integration deploys production on push to `main` and previews on PRs.
 
 ## Screenshots
 
@@ -78,13 +78,14 @@ All free-text portfolio content (summaries, narratives, highlights, etc.) lives 
 
 ## Deployment
 
-Deployed to [Vercel](https://vercel.com) via GitHub Actions:
+Deployed to [Vercel](https://vercel.com) through its native Git integration:
 
-- **`.github/workflows/ci.yml`** — runs `yarn build` on every push to `main` and on PRs.
-- **`.github/workflows/vercel-production.yml`** — deploys to production on push to `main`.
-- **`.github/workflows/vercel-preview.yml`** — deploys a preview on every PR and comments the URL.
+- **Production** — every push to `main`.
+- **Preview** — every pull request (Vercel comments the URL).
 
-The Vercel Git integration is intentionally **disconnected** so deploys only flow through GitHub Actions. Required repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
+**`.github/workflows/ci.yml`** only validates: it runs `yarn build` on every push to `main` and on PRs.
+
+`https://carlos3g.dev` is the canonical host; `www.carlos3g.dev` redirects to it (308, configured in the Vercel project's domains).
 
 ---
 

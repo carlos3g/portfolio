@@ -83,4 +83,4 @@ Custom utility classes worth knowing live in the `@layer components` block of `g
 
 ### Deployment
 
-Vercel, configured via `vercel.json` (framework `nextjs`, `installCommand: yarn install --immutable`). `metadataBase` in `app/[locale]/layout.tsx` is `https://carlos3g.dev`.
+Vercel, configured via `vercel.json` (framework `nextjs`, `installCommand: yarn install --immutable`). Deploys flow through Vercel's Git integration (push to `main` → production, PR → preview); GitHub Actions (`.github/workflows/ci.yml`) only validates the build. The canonical host is `https://carlos3g.dev` (`SITE_URL` in `lib/site.ts`, used as `metadataBase`); `www` 308-redirects to it via the Vercel project's domain settings — keep both in agreement.
