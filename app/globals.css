@@ -228,8 +228,8 @@
       color 0.25s;
   }
 
-  /* Half-width nodes stack on phones so long labels fit under the icon. */
-  @media (max-width: 560px) {
+  /* Narrow nodes stack so long labels fit under the icon. */
+  @media (max-width: 690px) {
     .map-node:not(.map-node-wide) {
       flex-direction: column;
       align-items: flex-start;
